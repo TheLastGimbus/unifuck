@@ -1,0 +1,43 @@
+name: Netlify deploy
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+env:
+  flutter_version: "2.2.0"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Cache Flutter
+      uses: actions/cache@v1
+      with:
+        path: /opt/hostedtoolcache/flutter
+        key: ${{ runner.OS }}-flutter-install-cache-${{ env.flutter_version }}
+    - uses: subosito/flutter-action@v1.5.0
+      with:
+        flutter-version: ${{ env.flutter_version }}
+    - run: flutter build web
+    # Remove fonts to make it lighter
+    - run:  rm build/web/assets/fonts/MaterialIcons-Regular.otf 
+
+    - name: Deploy to Netlify
+      uses: nwtgck/actions-netlify@v1.2.1
+      with:
+        publish-dir: './build/web'
+        production-branch: master
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        deploy-message: "Deploy from GitHub Actions"
+        enable-pull-request-comment: true
+        enable-commit-comment: true
+        overwrites-pull-request-comment: true
+      env:
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      timeout-minutes: 1
