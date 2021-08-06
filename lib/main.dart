@@ -90,7 +90,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ),
-            Text('THIS SHOULD NEVER BE VISIBLE IN PROD'),
             Text(
               'Jebałeś sie z Unity:',
               style: tt.headline3,
