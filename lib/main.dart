@@ -90,6 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ),
+            Text('sample text to try CI'),
             Text(
               'Jebałeś sie z Unity:',
               style: tt.headline3,
