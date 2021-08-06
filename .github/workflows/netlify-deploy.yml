@@ -28,10 +28,13 @@ jobs:
     # Remove fonts to make it lighter
     - run:  rm build/web/assets/fonts/MaterialIcons-Regular.otf 
 
+    # Change folder name for it to route correclty
+    - run: mv build/web/ build/unifuck/
     - name: Deploy to Netlify
       uses: nwtgck/actions-netlify@v1.2.1
       with:
-        publish-dir: './build/web'
+        # Deploy it like "site.com/unifuck", not just "site.com"
+        publish-dir: './build'
         production-branch: master
         github-token: ${{ secrets.GITHUB_TOKEN }}
         deploy-message: "Deploy from GitHub Actions"
